@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail; // <--- tambahkan ini
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail // <--- ubah di sini
 {
     use HasFactory, Notifiable;
 
@@ -23,21 +24,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
+    ];
 
-    // Tambahkan ini agar password lama tetap bisa diterima
+    // Otomatis hash password jika diisi manual
     public function setPasswordAttribute($value)
     {
-        // Hanya hash password jika belum di-hash
-        if (!Hash::needsRehash($value)) {
-            $this->attributes['password'] = Hash::make($value);
-        } else {
-            $this->attributes['password'] = $value;
-        }
+        $this->attributes['password'] = Hash::needsRehash($value)
+            ? Hash::make($value)
+            : $value;
     }
 }

@@ -65,7 +65,7 @@
             @forelse($products as $product)
                 <div class='product'>
                     <a href="/order/{{ $product->id }}">
-                        <img src="{{ asset('image/' . $product->picture_product) }}">
+                        <img src="{{ asset('storage/' . $product->picture_product) }}">
                     </a>
                     <h4>${{ $product->price }}</h4>
                     <h3>{{ $product->product_name }}</h3>

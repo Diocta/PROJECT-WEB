@@ -48,11 +48,13 @@ class AuthenticatedSessionController extends Controller
      * Redirect users after authentication.
      */
     protected function authenticated(Request $request, $user): RedirectResponse
-    {
-        if ($user->is_admin) {
-            return redirect()->route('admin.dashboard'); // Pastikan ada route untuk admin
-        }
-
-        return redirect()->route('index'); // Pastikan ada route untuk toko
+{
+    if ($user->is_admin) {
+        return redirect('/admin/dashboard'); // langsung pakai URL
     }
+
+    return redirect('/shop'); // langsung pakai URL
 }
+
+}
+

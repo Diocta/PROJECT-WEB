@@ -1,28 +1,49 @@
-@extends('layouts.app')
+<!-- resources/views/auth/login.blade.php -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-@section('content')
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 class="text-2xl font-semibold text-center">Login</h2>
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Selamat Datang</h1>
+
+        @if(session('status'))
+            <div class="mb-4 text-sm text-green-600">
+                {{ session('status') }}
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
-            <div class="mt-4">
-                <label class="block">Email</label>
-                <input type="email" name="email" class="w-full p-2 border rounded" required>
+
+            <div class="mb-4">
+                <label class="block text-gray-700">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                    class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
-            <div class="mt-4">
-                <label class="block">Password</label>
-                <input type="password" name="password" class="w-full p-2 border rounded" required>
+            <div class="mb-6">
+                <label class="block text-gray-700">Password</label>
+                <input type="password" name="password" required
+                    class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
-            <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded w-full">Login</button>
+            <button type="submit"
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg mb-4">
+                Masuk
+            </button>
+
+            <a href="{{ route('register') }}" 
+               class="w-full block text-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg">
+                Daftar Akun Baru
+            </a>
         </form>
-
-        <p class="mt-4 text-center">Belum punya akun? 
-            <a href="{{ route('register') }}" class="text-blue-500">Daftar</a>
-        </p>
     </div>
-</div>
-@endsection
+
+</body>
+</html>
