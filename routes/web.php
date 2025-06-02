@@ -30,34 +30,31 @@ Route::get('/dashboard', function () {
 
 // Authenticated routes (sudah login)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Profil pengguna
+    // Profil user
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Route untuk admin (hanya jika sudah login & is_admin = true)
-    Route::middleware(['admin'])->group(function () {
-        Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    });
+    // admin = true
+    Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+});
 
-    // Route untuk user biasa
+    //user
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
     Route::get('/shop/{category}', [ShopController::class, 'category'])->name('shop.category');
 });
 
-// Email Verification Routes
+// Email Verifikasi
 Route::middleware('auth')->group(function () {
-    // Menampilkan halaman verifikasi email
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->name('verification.notice');
 
-    // Verifikasi email link (yang dikirim ke email)
     Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 
-    // Kirim ulang link verifikasi email
     Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
 
@@ -65,5 +62,4 @@ Route::middleware('auth')->group(function () {
     })->middleware(['throttle:6,1'])->name('verification.send');
 });
 
-// Auth (login, register, dsb)
 require __DIR__.'/auth.php';
