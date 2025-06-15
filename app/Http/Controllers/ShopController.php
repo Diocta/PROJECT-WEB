@@ -17,14 +17,15 @@ class ShopController extends Controller
 
     // Menampilkan produk berdasarkan kategori
     public function category($category)
-    {
-        $categoryData = Category::where('name', $category)->first();
+{
+    $categoryData = Category::whereRaw('LOWER(name) = ?', [strtolower($category)])->first();
 
-        if (!$categoryData) {
-            abort(404); // Jika kategori tidak ditemukan
-        }
-
-        $products = Product::where('category_id', $categoryData->id)->get();
-        return view('shop.index', compact('products', 'category'));
+    if (!$categoryData) {
+        abort(404); // Jika kategori tidak ditemukan
     }
+
+    $products = Product::where('category_id', $categoryData->id)->get();
+    return view('shop.index', compact('products', 'category'));
+}
+
 }

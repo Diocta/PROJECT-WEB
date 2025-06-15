@@ -25,7 +25,6 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
         return $this->authenticated($request, Auth::user());
@@ -48,13 +47,11 @@ class AuthenticatedSessionController extends Controller
      * Redirect users after authentication.
      */
     protected function authenticated(Request $request, $user): RedirectResponse
-{
-    if ($user->is_admin) {
-        return redirect('/admin/dashboard'); // langsung pakai URL
+    {
+        if ($user->is_admin) {
+            return redirect('/admin/dashboard');
+        }
+
+        return redirect('/home');
     }
-
-    return redirect('/shop'); // langsung pakai URL
 }
-
-}
-

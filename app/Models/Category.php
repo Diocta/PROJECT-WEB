@@ -16,4 +16,13 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    protected $table = 'article_categories';
+protected $primaryKey = 'categories_id';
+
+public function articles()
+{
+    return $this->hasMany(Article::class, 'category_id', 'categories_id');
+}
+
 }

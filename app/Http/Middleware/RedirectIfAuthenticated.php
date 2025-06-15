@@ -11,12 +11,16 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            if (Auth::user()->is_admin) {
-                return redirect('/admin/dashboard'); // Admin ke dashboard admin
+            // Tambahan: jika user adalah admin (is_admin == 1)
+            if (Auth::user()->is_admin == 1) {
+                return redirect('admin/index');
             }
-            return redirect('/shop'); // User biasa ke toko
+
+            // Jika user sudah login tapi bukan admin
+            return redirect('/home');
         }
 
+        // Jika belum login, lanjutkan ke halaman berikutnya (misalnya login/register)
         return $next($request);
     }
 }
